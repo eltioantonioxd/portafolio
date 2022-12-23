@@ -12,6 +12,8 @@ services:
       - db
     volumes:
       - ./Front/src:/usr/share/nginx/html
+    networks:
+        portafolio:
 
   backend:
     build: ./Backend
@@ -23,16 +25,27 @@ services:
       - ./Backend:/app
     depends_on:
       - db
+    networks:
+        portafolio:
 
   db:
-    image: mysql:5.7.13
-    container_name: mysql
-    restart: always
-    ports:
-      - 3306:3306 
+      image: mongo:6.0.3
+      container_name: db-mongo
+      restart: always
+      ports:
+        - 27018:27017
+      env_file:
+        - common.env
+      volumes:
+        - ./db/datadir:/data/db
+      networks:
+        portafolio:
 
-    env_file:
-      - common.env
-    
-    volumes:
-      - ./db/data:/var/lib/mysql
+networks:
+  portafolio:
+    name: portafolio
+    driver: bridge
+    ipam:
+      config:
+        - subnet: "172.23.0.0/16"
+          gateway: "172.23.0.1"
