@@ -1,4 +1,4 @@
-version: '3.3'
+version: '3.9'
 
 services:
   front:
@@ -22,7 +22,7 @@ services:
     ports:
       - 5000:5000
     volumes:
-      - ./Backend:/app
+      - ./Backend/app:/app
     depends_on:
       - db
     networks:
@@ -43,7 +43,7 @@ services:
 
 networks:
   portafolio:
-    name: portafolio
+    name: network-portafolio
     driver: bridge
     ipam:
       config:
